@@ -2,7 +2,10 @@
 cp /app/nginx.conf /etc/nginx/nginx.conf
 nginx
 
-# Override PORT so backend runs on 3000 (nginx proxies to this)
-export PORT=3000
+# Run prisma migrations
+pnpm run prisma-db-push
 
-pnpm run pm2-run
+# Start services with pm2 using ecosystem config (sets PORT=3000 for backend)
+pm2 delete all || true
+pm2 start ecosystem.config.js
+pm2 logs
